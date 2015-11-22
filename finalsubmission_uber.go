@@ -755,7 +755,7 @@ func Put(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
                                                               //fmt.Println(traversed_end_lat)
                                                               //fmt.Println(traversed_end_lng)
                                                               res.Status="Completed"
-                                                              res.Starting_from_location_id="7"
+                                                              res.Starting_from_location_id=arraying[trip_id1].locations[0]
                                                               res.Next_destination_location_id=""
                                                               res.Id=p.ByName("trip_id")
                                                               res.Total_uber_costs=repl.Total_uber_costs
