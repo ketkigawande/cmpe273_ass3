@@ -462,6 +462,8 @@ type Response1 struct {
    }
 
    
+
+   
 func Put(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
                  rep1:=Response1{}
                  rep2:=Response1{}
@@ -549,7 +551,31 @@ func Put(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
                    req.Start_longitude=rep1.Coordinate.Lng
                    req.End_latitude=rep2.Coordinate.Lat
                    req.End_longitude=rep2.Coordinate.Lng
-                   req.Product_id="04a497f5-380d-47f2-bf1b-ad4cfdcb51f2"
+
+                   product_url := fmt.Sprint("https://sandbox-api.uber.com/v1/products?latitude=",rep1.Coordinate.Lat,"&longitude=",rep1.Coordinate.Lng,"&server_token=m4v-9KBbXzZ9WxEcpBRSfC64JToSWir9mPi4fnKT");
+                                              
+                                              response4, err := http.Get(product_url)
+      
+                                          if err != nil {
+                                          fmt.Printf("%s", err)
+                                          os.Exit(1)
+                                          } else {
+                                          defer response4.Body.Close()
+                                          contentss, err := ioutil.ReadAll(response4.Body)
+                                          if err != nil {
+                                          fmt.Printf("%s", err)
+                                          os.Exit(1)
+                                          }
+                                          var g interface{}
+                                          err=json.Unmarshal(contentss, &g)
+                                          //fmt.Println(g);
+                                           pRes := g.(map[string]interface{})["products"]
+                                           pRes0 := pRes.([]interface{})[0]
+                                           pEst := pRes0.(map[string]interface{})["product_id"]
+                                           //fmt.Println(pEst)
+                                           req.Product_id=pEst.(string)
+                                           }
+                   //req.Product_id="04a497f5-380d-47f2-bf1b-ad4cfdcb51f2"
                    
 
                    //var jsonStr = []byte(`{"start_latitude":"37.334381","start_longitude":"-121.89432","end_latitude":"37.77703","end_longitude":"-122.419571","product_id":"04a497f5-380d-47f2-bf1b-ad4cfdcb51f2"}`)
@@ -588,13 +614,13 @@ func Put(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
                                       var f interface{}
                                       err=json.Unmarshal(contents, &f)
                                       mRes := f.(map[string]interface{})["eta"]
-                                      mReqId := f.(map[string]interface{})["request_id"].(string)
+                                      mReqId := f.(map[string]interface{})["request_id"]
                                       //fmt.Println(mReqId)
 
                                        //PUT request to set status at sandbox to completed
 
 
-                                     puturl :=fmt.Sprint("https://sandbox-api.uber.com/v1/sandbox/requests/"+mReqId)
+                                     puturl :=fmt.Sprint("https://sandbox-api.uber.com/v1/sandbox/requests/"+mReqId.(string))
                                      req2.Status="completed"
                                      jsonStr1,_:=json.Marshal(req2)
 
@@ -663,7 +689,30 @@ func Put(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
                                                req.Start_longitude=rep1.Coordinate.Lng
                                                req.End_latitude=rep2.Coordinate.Lat
                                                req.End_longitude=rep2.Coordinate.Lng
-                                               req.Product_id="04a497f5-380d-47f2-bf1b-ad4cfdcb51f2"
+                                               product_url := fmt.Sprint("https://sandbox-api.uber.com/v1/products?latitude=",rep1.Coordinate.Lat,"&longitude=",rep1.Coordinate.Lng,"&server_token=m4v-9KBbXzZ9WxEcpBRSfC64JToSWir9mPi4fnKT");
+                                              
+                                              response4, err := http.Get(product_url)
+      
+                                                if err != nil {
+                                                fmt.Printf("%s", err)
+                                                os.Exit(1)
+                                                } else {
+                                                defer response4.Body.Close()
+                                                contentss, err := ioutil.ReadAll(response4.Body)
+                                                if err != nil {
+                                                fmt.Printf("%s", err)
+                                                os.Exit(1)
+                                                }
+                                                var g interface{}
+                                                err=json.Unmarshal(contentss, &g)
+                                                //fmt.Println(g);
+                                                 pRes := g.(map[string]interface{})["products"]
+                                                 pRes0 := pRes.([]interface{})[0]
+                                                 pEst := pRes0.(map[string]interface{})["product_id"]
+                                                 //fmt.Println(pEst)
+                                                 req.Product_id=pEst.(string)
+                                                 }
+                                               //req.Product_id="04a497f5-380d-47f2-bf1b-ad4cfdcb51f2"
                                                
 
                                                //POST request to get REQUEST_ID
@@ -755,7 +804,7 @@ func Put(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
                                                               //fmt.Println(traversed_end_lat)
                                                               //fmt.Println(traversed_end_lng)
                                                               res.Status="Completed"
-                                                              res.Starting_from_location_id="7"
+                                                              res.Starting_from_location_id=arraying[trip_id1].locations[0]
                                                               res.Next_destination_location_id=""
                                                               res.Id=p.ByName("trip_id")
                                                               res.Total_uber_costs=repl.Total_uber_costs
