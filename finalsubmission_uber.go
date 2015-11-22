@@ -551,7 +551,7 @@ func Put(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
                    req.Start_longitude=rep1.Coordinate.Lng
                    req.End_latitude=rep2.Coordinate.Lat
                    req.End_longitude=rep2.Coordinate.Lng
-
+//trial
                    product_url := fmt.Sprint("https://sandbox-api.uber.com/v1/products?latitude=",rep1.Coordinate.Lat,"&longitude=",rep1.Coordinate.Lng,"&server_token=m4v-9KBbXzZ9WxEcpBRSfC64JToSWir9mPi4fnKT");
                                               
                                               response4, err := http.Get(product_url)
